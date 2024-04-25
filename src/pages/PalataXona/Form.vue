@@ -1,0 +1,120 @@
+<template>
+  <div>
+    <div class="katta">
+      <span>Шифокор</span>
+      <button
+        style="padding: 4px 10px; margin-right: 10px"
+        class="btn"
+        @click="Prev()"
+      >
+        <b-icon style="color: white" icon="house-door-fill"> </b-icon>
+      </button>
+    </div>
+    <div>
+      <div class="oyna1">
+        <div class="ustun">
+          <span>
+            <span class="shirift">{{ $t("Шифокор") }}</span>
+            <span style="color: red;">*</span>
+            <span v-if="errors !== null">
+              <span
+                style="color: red; font-size: 9px"
+                v-if="!errors.name.required"
+                >{{ $t("Шифокор тўлдирилиши керак") }}</span
+              >
+              <span
+                style="color: red; font-size: 9px"
+                v-if="!errors.name.minLength"
+                >{{ $t("Шифокорда камида 4 та белги бўлиши керак") }}</span
+              >
+            </span>
+          </span>
+          <b-input
+            style="height: 35px; background: #fff; border: 1px solid #ced4da;"
+            id="shifokor-name"
+            v-model="modelvue.name"
+            type="text"
+          />
+        </div>
+        <div class="ustun">
+          <span>
+            <span class="shirift">{{ $t("Шифокор бўлимлари") }}</span>
+            <span style="color: red;">*</span>
+            <span v-if="errors !== null">
+              <span
+                style="color: red; font-size: 9px"
+                v-if="!errors.palata_id.required"
+                >{{ $t("Шифокор бўлими тўлдирилиши керак") }}</span
+              >
+            </span>
+          </span>
+          <v-select
+            :options="category"
+            label="name"
+            :reduce="option => option.id"
+            v-model="modelvue.category_id"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "shifokor-form",
+  props: ["modelvue", "errors"],
+  data() {
+    return {
+      category: []
+    };
+  },
+  methods: {
+    home() {
+      this.$router.push("/palata/xona");
+    },
+    Prev() {
+      this.$router.push("/palata/xona");
+    },
+    getCategory() {
+      let self = this;
+      axios({
+        method: "get",
+        url: "/palata_category/all"
+      }).then(res => {
+        self.category = res.data.data;
+      });
+    }
+  },
+  mounted() {
+    this.getCategory();
+  }
+};
+</script>
+<style>
+.katta {
+  background: #007bff;
+  margin-top: -25px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 40px;
+  border-radius: 8px;
+  color: #fff;
+  text-indent: 15px;
+  box-shadow: 5px 8px 10px rgba(25, 95, 176, 0.5);
+}
+.oyna1 {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.shirift {
+  font-size: 16px;
+}
+.ustun {
+  width: 49%;
+}
+</style>
